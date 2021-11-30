@@ -1,0 +1,9 @@
+version: '3'
+services:
+  generator:
+    build: .
+    container_name: 'generator'
+    working_dir: '/root/src'
+    tty: true
+    volumes:
+      - ./src:/root/src
