@@ -12,6 +12,7 @@ ENV TERM xterm
 
 RUN mkdir -p /root/src
 RUN mkdir -p /root/data
+RUN mkdir -p /root/output
 COPY requirements.txt /root/src
 COPY data/ /root/data
 WORKDIR /root/src

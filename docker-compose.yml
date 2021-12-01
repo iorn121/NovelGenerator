@@ -7,3 +7,4 @@ services:
     tty: true
     volumes:
       - ./src:/root/src
+      - ./output:/root/output
