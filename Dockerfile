@@ -11,7 +11,9 @@ ENV TZ JST-9
 ENV TERM xterm
 
 RUN mkdir -p /root/src
+RUN mkdir -p /root/data
 COPY requirements.txt /root/src
+COPY data/ /root/data
 WORKDIR /root/src
 
 RUN pip install --upgrade pip
