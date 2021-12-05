@@ -23,3 +23,6 @@ def make_dic(splitted_text):
 
 
 splitted_text = markov_generator.recursive_file_check(ROOT_PATH)
+w2i, i2w = make_dic(splitted_text)
+print(splitted_text)
+print(w2i)
