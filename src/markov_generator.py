@@ -1,9 +1,20 @@
 import os
+import codecs
+import io
+import chardet
 from janome.tokenizer import Tokenizer
 import markovify
 
 
 def text_cleansing(text):
+    """[テキストの不要な文字を排除して、分かち書きに変換する]
+
+    Args:
+        text ([string]): [UTF-8にエンコードされた加工対象のテキスト]
+
+    Returns:
+        [string]: [綺麗にして分かち書きにしたテキスト]]
+    """
     # 改行、スペース、問題を起こす文字の置換
     table = str.maketrans({
         '。': '.',
@@ -36,15 +47,28 @@ def text_cleansing(text):
     return splitted_text
 
 
-ROOT_PATH = "/root/data/"
+# データの保管先
+ROOT_PATH_RAW = "/root/data/raw"
+ROOT_PATH_UTF = "/root/data/utf"
 
 
-def recursive_file_check(path):
+def convert_charcode(raw_path, utf_path):
+    """[RAWのテキストファイルからUTF-8形式にエンコードして返す]
+
+    Args:
+        raw_path ([string]): [description]
+        utf_path ([string]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     splitted_text = ""
-    files = os.listdir(path)
-    for file in files:
-        file_path = path+file
-        with open(file_path, mode="r", encoding="shift_jis") as f:
+    raw_files = os.listdir(raw_path)
+    utf_files = os.listdir(utf_path)
+    for file in raw_files:
+        file_path = raw_path + file
+        with open(file_path, mode="rb") as f:
+            chardet.detect()
             text = f.read()
         # fileだったら処理
         splitted_text += text_cleansing(text)+"\n"
