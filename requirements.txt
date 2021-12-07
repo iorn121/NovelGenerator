@@ -1,3 +1,4 @@
+chardet
 janome
 markovify
 openai
