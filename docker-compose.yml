@@ -8,3 +8,4 @@ services:
     volumes:
       - ./src:/root/src
       - ./output:/root/output
+      - ./data/dest:/root/data/dest
