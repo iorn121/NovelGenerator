@@ -2,3 +2,4 @@ chardet
 janome
 markovify
 openai
+pandas
