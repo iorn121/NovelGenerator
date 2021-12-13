@@ -3,3 +3,6 @@ janome
 markovify
 openai
 pandas
+torch
+torchvision
+torchaudio
