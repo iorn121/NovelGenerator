@@ -1,10 +1,12 @@
 # https://atmarkit.itmedia.co.jp/ait/articles/2103/19/news035.html
 
 import os
-import io,sys
+import io
+import sys
 import csv
 from janome.tokenizer import Tokenizer
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 
 def text_cleansing(text):
     """[テキストの不要な文字を排除して、分かち書きに変換する]
@@ -30,10 +32,11 @@ def text_cleansing(text):
         '[': '［',
         ']': '］',
         '"': '”',
-        "'": "’",
+        "'": '’',
+        '!': '！',
+        '?': '？'
     })
     text = text.translate(table)
-    # print(text)
     t = Tokenizer()
     result = t.tokenize(text, wakati=True)
     result = list(result)
@@ -93,10 +96,10 @@ def make_dic(splitted_text):
     return word2id, id2word
 
 
-def word2id(corpus, word2id, max_length):
+def word2id(corpus, word2id, max_length=None):
     result = []
     for word in corpus.split(' '):
-        if len(result) > max_length:
+        if max_length and len(result) > max_length:
             break
         result.append(word2id[word])
     with open("../output/w2i_text.csv", mode="w", encoding="utf_8") as f:
@@ -135,7 +138,6 @@ def main():
         f.write(splitted_text)
     w2i_text = word2id(splitted_text, w2i, 100)
     i2w_text = id2word(w2i_text, i2w)
-    print(i2w_text)
 
 
 main()

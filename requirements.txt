@@ -2,6 +2,7 @@ chardet
 janome
 markovify
 openai
+matplotlib
 pandas
 torch
 torchvision
