@@ -1,5 +1,6 @@
 chardet
 janome
+beautifulsoup4
 markovify
 openai
 matplotlib

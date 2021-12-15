@@ -43,7 +43,7 @@ def text_cleansing(text):
     splitted_text = ""
     for i in range(len(result)):
         splitted_text += result[i]
-        if result[i] == "。" or result[i] == "！" or result[i] == "？":
+        if result[i] == "." or result[i] == "！" or result[i] == "？":
             splitted_text += "\n"
         else:
             splitted_text += " "
@@ -80,11 +80,14 @@ def convert_src_folder(src_path, dest_path):
 def make_dic(splitted_text):
     word2id = {}
     id2word = {}
-    for word in splitted_text.split(' '):
-        if word not in word2id:
-            id = len(word2id) + 1  # id=0はパディング用にとっておく
-            word2id[word] = id
-            id2word[id] = word
+    for line in splitted_text:
+        if line == "":
+            continue
+        for word in line.split(' '):
+            if word not in word2id:
+                id = len(word2id) + 1  # id=0はパディング用にとっておく
+                word2id[word] = id
+                id2word[id] = word
     with open("../output/corpus_w2i.csv", mode="w", encoding="utf_8") as f:
         writer = csv.writer(f)
         for k, v in word2id.items():
@@ -98,10 +101,17 @@ def make_dic(splitted_text):
 
 def word2id(corpus, word2id, max_length=None):
     result = []
-    for word in corpus.split(' '):
-        if max_length and len(result) > max_length:
-            break
-        result.append(word2id[word])
+    for line in corpus:
+        if line == "":
+            continue
+        now = []
+        for word in corpus.split(' '):
+            if max_length and len(result) > max_length:
+                break
+            if word not in word2id:
+                continue
+            now.append(word2id[word])
+        result.append(now)
     with open("../output/w2i_text.csv", mode="w", encoding="utf_8") as f:
         f.write("\n".join(map(str, result)))
     return result
@@ -134,10 +144,11 @@ def main():
             splitted_text += "\n"
     w2i, i2w = make_dic(splitted_text)
 
-    with open("../output/corpus_wakati.txt", mode="a", encoding="utf_8") as f:
-        f.write(splitted_text)
-    w2i_text = word2id(splitted_text, w2i, 100)
-    i2w_text = id2word(w2i_text, i2w)
+    # with open("../output/corpus_wakati.txt", mode="a", encoding="utf_8") as f:
+    #     f.write(splitted_text)
+    w2i_text = word2id(splitted_text, w2i)
+    print(w2i_text)
+    # i2w_text = id2word(w2i_text, i2w)
 
 
 main()
