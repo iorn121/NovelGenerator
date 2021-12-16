@@ -1,4 +1,6 @@
 chardet
+mecab-python3
+unidic
 janome
 beautifulsoup4
 markovify

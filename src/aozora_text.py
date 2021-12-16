@@ -1,3 +1,4 @@
+import time
 from bs4 import BeautifulSoup
 from urllib import request
 import re
@@ -29,13 +30,37 @@ def scrape_text(url: str):
     return text_list
 
 
+def scrape_all_writing_text(author: str):
+    base_url = 'http://www.aozora.gr.jp/index_pages/'
+    person = author+'.html'
+    response = request.urlopen(base_url+person)
+    soup = BeautifulSoup(response, features="html.parser")
+
+    text_list = []
+
+    url_list = [item['href'] for item in soup.find('ol').find_all('a')]
+    for url in url_list:
+        title_page_url = base_url+url
+        title_page_response = request.urlopen(title_page_url)
+        title_page_soup = BeautifulSoup(
+            title_page_response, features="html.parser")
+        html_path = title_page_soup.find_all('div', align='right')[
+            1].find_all('a')[1]['href']
+        title_page_url = re.sub('card\d+\.html', '', title_page_url)
+        result = scrape_text(title_page_url + html_path)
+        text_list.extend(result)
+        time.sleep(5)
+
+    return text_list
+
+
 def main():
-    url = 'https://www.aozora.gr.jp/cards/000074/files/429_19794.html'
-    text_list = scrape_text(url)
+    author = 'person74'
+    data = scrape_all_writing_text(author)
 
     # 文章を書き出す
-    with open(f"../output/aozora_text/text_ShironoAruMachinite.txt", mode="w") as f:
-        f.write('\n'.join(text_list))
+    with open(f"../output/aozora_text/text_{author}.txt", mode="w") as f:
+        f.write('\n'.join(data))
 
 
 if __name__ == '__main__':
