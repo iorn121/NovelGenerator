@@ -88,67 +88,58 @@ def make_dic(splitted_text):
                 id = len(word2id) + 1  # id=0はパディング用にとっておく
                 word2id[word] = id
                 id2word[id] = word
-    with open("../output/corpus_w2i.csv", mode="w", encoding="utf_8") as f:
-        writer = csv.writer(f)
-        for k, v in word2id.items():
-            writer.writerow([k, v])
-    with open("../output/corpus_i2w.csv", mode="w", encoding="utf_8") as f:
-        writer = csv.writer(f)
-        for k, v in id2word.items():
-            writer.writerow([k, v])
+
     return word2id, id2word
 
 
-def word2id(corpus, word2id, max_length=None):
+def word2id(corpus, word2id, max_length=100):
     result = []
     for line in corpus:
         if line == "":
             continue
-        now = []
-        for word in corpus.split(' '):
-            if max_length and len(result) > max_length:
-                break
-            if word not in word2id:
-                continue
-            now.append(word2id[word])
+        now = [word2id[word] for word in line.split(' ')]
+        if len(now) > max_length:
+            continue
+        now += [0]*(max_length-len(now))
         result.append(now)
-    with open("../output/w2i_text.csv", mode="w", encoding="utf_8") as f:
-        f.write("\n".join(map(str, result)))
     return result
 
 
-def id2word(id_data, id_to_word):
+def id2word(id_data, id2word):
     result = ""
-    for id in id_data:
-        result += id_to_word[id]+" "
-    with open("../output/i2w_text.csv", mode="w", encoding="utf_8") as f:
-        f.write(result)
+    for line in id_data:
+        result += "".join([id2word[id] for id in line if id != 0])+"\n"
     return result
 
 
 def main():
     # データの保管先
-    ROOT_PATH_SRC = "/root/data/src/"
-    ROOT_PATH_DEST = "/root/data/dest/"
-    splitted_text = ""
+    author = 'person74'
+    text = []
+    with open(f"../output/aozora_text/wakati_{author}.txt", mode="r", encoding="utf_8") as f:
+        raw_text = f.read()
+        text.extend(raw_text.split("\n"))
 
-    if not convert_src_folder(ROOT_PATH_SRC, ROOT_PATH_DEST):
-        exit()
+    # word2id, id2wordを作成し保存
+    w2i, i2w = make_dic(text)
+    # with open("../output/corpus/word2id_{author}.csv", mode="w", encoding="utf_8") as f:
+    #     writer = csv.writer(f)
+    #     for k, v in w2i.items():
+    #         writer.writerow([k, v])
+    # with open("../output/corpus/id2word_{author}.csv", mode="w", encoding="utf_8") as f:
+    #     writer = csv.writer(f)
+    #     for k, v in i2w.items():
+    #         writer.writerow([k, v])
+    id_data = word2id(text, w2i)
+    word_data = id2word(id_data, i2w)
+    with open(f"../output/corpus/id_data_{author}.txt", mode="w", encoding="utf_8") as f:
+        for line in id_data:
+            f.write(" ".join(map(str, line)))
+            f.write("\n")
+    with open(f"../output/corpus/word_data_{author}.txt", mode="w", encoding="utf_8") as f:
+        f.write(word_data)
+    print("completed")
 
-    files = os.listdir(ROOT_PATH_DEST)
-    for text_file in files:
-        text_file_name = ROOT_PATH_DEST+text_file
-        with open(text_file_name, "r", encoding="utf-8") as f:
-            text = f.read()
-            splitted_text += text_cleansing(text)
-            splitted_text += "\n"
-    w2i, i2w = make_dic(splitted_text)
 
-    # with open("../output/corpus_wakati.txt", mode="a", encoding="utf_8") as f:
-    #     f.write(splitted_text)
-    w2i_text = word2id(splitted_text, w2i)
-    print(w2i_text)
-    # i2w_text = id2word(w2i_text, i2w)
-
-
-main()
+if __name__ == "__main__":
+    main()

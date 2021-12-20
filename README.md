@@ -4,10 +4,25 @@
 
 ### aozora_text.py
 
+実装済み
 scrape_text:[青空文庫の URL からスクレイピング、整形したデータを返す]
 scrape_all_writing_text:[特定の筆者の作品を全てスクレイピング、整形したデータを返す]
+make_wakati:[文章データを各文分かち書きにする]
+
+未実装
+find_text:[青空文庫のローカルデータからファイルを開いて、整形したデータを返す]
+find_all_writing_text:[特定の筆者の作品を全て入手し、整形したデータを返す]
 
 ## 2 テキストデータを加工してコーパスや辞書を作成する
+
+### corpus.py
+
+実装済み
+text_cleansing:[テキストの不要な文字を排除して、分かち書きに変換する] ※使わない
+convert_src_folder:[shift-jis から utf-8 にソースファイルを変換] ※使わない
+make_dic:[分かち文から word2id, id2word を生成]
+word2id:[分かち文を id データに変換]
+id2word:[id データをテキストデータに変換]
 
 ## 3 PyTorch で扱うために、Dataset クラスからベクトル化し RNN に入力する
 
