@@ -122,15 +122,15 @@ def main():
 
     # word2id, id2wordを作成し保存
     w2i, i2w = make_dic(text)
-    # with open("../output/corpus/word2id_{author}.csv", mode="w", encoding="utf_8") as f:
+    # with open(f"../output/corpus/word2id_{author}.csv", mode="w", encoding="utf_8") as f:
     #     writer = csv.writer(f)
     #     for k, v in w2i.items():
     #         writer.writerow([k, v])
-    # with open("../output/corpus/id2word_{author}.csv", mode="w", encoding="utf_8") as f:
+    # with open(f"../output/corpus/id2word_{author}.csv", mode="w", encoding="utf_8") as f:
     #     writer = csv.writer(f)
     #     for k, v in i2w.items():
     #         writer.writerow([k, v])
-    id_data = word2id(text, w2i)
+    id_data = word2id(text, w2i, 20)
     word_data = id2word(id_data, i2w)
     with open(f"../output/corpus/id_data_{author}.txt", mode="w", encoding="utf_8") as f:
         for line in id_data:
