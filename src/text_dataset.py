@@ -138,7 +138,7 @@ def main():
     VOCAB_SIZE = len(w2i) + 1
     model = Net(VOCAB_SIZE, EMBEDDING_DIM, HIDDEN_SIZE, BATCH_SIZE, NUM_LAYERS)
     criterion = nn.CrossEntropyLoss(ignore_index=0)
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.03)
+    optimizer = optim.SGD(model.parameters(), lr=0.03)
 
     epochs = 1
     losses = train(model, dataloader, criterion, optimizer, epochs, VOCAB_SIZE)
